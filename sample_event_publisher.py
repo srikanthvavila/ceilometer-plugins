@@ -36,7 +36,7 @@ def publish_cpe_stats():
             'priority':'INFO',
             'payload': {'vcpe_id':'vcpe-222-432',
                         'user_id': keystone_user_id,
-                        'project_id': keystone_tenant_id
+                        'tenant_id': keystone_tenant_id
                        }
            }
      producer.publish(msg)
@@ -47,7 +47,7 @@ def publish_cpe_stats():
             'priority':'INFO',
             'payload': {'vcpe_id':'vcpe-222-432',
                         'user_id': keystone_user_id,
-                        'project_id': keystone_tenant_id,
+                        'tenant_id': keystone_tenant_id,
                         'cache_size':150
                        }
             }           
