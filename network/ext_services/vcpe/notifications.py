@@ -26,7 +26,7 @@ from ceilometer import sample
 
 OPTS = [
     cfg.StrOpt('vsgservice_control_exchange',
-               default='vsgservice',
+               default='vcpeservice',
                help="Exchange name for VCPE notifications."),
 ]
 
