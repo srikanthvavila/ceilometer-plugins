@@ -25,8 +25,8 @@ from ceilometer.openstack.common import log
 from ceilometer import sample
 
 OPTS = [
-    cfg.StrOpt('vcpeservice_control_exchange',
-               default='vcpeservice',
+    cfg.StrOpt('vsgservice_control_exchange',
+               default='vsgservice',
                help="Exchange name for VCPE notifications."),
 ]
 
@@ -48,7 +48,7 @@ class VCPENotificationBase(plugin_base.NotificationBase):
         """
         LOG.info("SRIKANTH: get_targets for VCPE Notification Listener")
         return [oslo.messaging.Target(topic=topic,
-                                      exchange=conf.vcpeservice_control_exchange)
+                                      exchange=conf.vsgservice_control_exchange)
                 for topic in conf.notification_topics]
 
 class VCPENotification(VCPENotificationBase):
@@ -59,9 +59,9 @@ class VCPENotification(VCPENotificationBase):
     def process_notification(self, message):
         LOG.info('SRIKANTH: Received VCPE notification: vcpe_id=%(vcpe_id)s' % {'vcpe_id': message['payload']['vcpe_id']})
         yield sample.Sample.from_notification(
-            name='vcpe',
+            name='vsg',
             type=sample.TYPE_GAUGE,
-            unit='vcpe',
+            unit='vsg',
             volume=1,
             user_id=message['payload']['user_id'],
             project_id=message['payload']['tenant_id'],
@@ -158,7 +158,7 @@ class VCPEDNSCacheSize(VCPENotificationBase):
     def process_notification(self, message):
         LOG.info('SRIKANTH: Received VCPE cache.size notification')
         yield sample.Sample.from_notification(
-            name='vcpe.dns.cache.size',
+            name='vsg.dns.cache.size',
             type=sample.TYPE_GAUGE,
             unit='entries',
             volume=float(message['payload']['cache_size']),
@@ -175,7 +175,7 @@ class VCPEDNSTotalInsertedEntries(VCPENotificationBase):
     def process_notification(self, message):
         LOG.info('SRIKANTH: Received VCPE total_instered_entries notification')
         yield sample.Sample.from_notification(
-            name='vcpe.dns.total_instered_entries',
+            name='vsg.dns.total_instered_entries',
             type=sample.TYPE_CUMULATIVE,
             unit='entries',
             volume=float(message['payload']['total_instered_entries']),
@@ -192,7 +192,7 @@ class VCPEDNSReplacedUnexpiredEntries(VCPENotificationBase):
     def process_notification(self, message):
         LOG.info('SRIKANTH: Received VCPE replaced_unexpired_entries notification')
         yield sample.Sample.from_notification(
-            name='vcpe.dns.replaced_unexpired_entries',
+            name='vsg.dns.replaced_unexpired_entries',
             type=sample.TYPE_CUMULATIVE,
             unit='entries',
             volume=float(message['payload']['replaced_unexpired_entries']),
@@ -209,7 +209,7 @@ class VCPEDNSQueriesForwarded(VCPENotificationBase):
     def process_notification(self, message):
         LOG.info('SRIKANTH: Received VCPE queries_forwarded notification')
         yield sample.Sample.from_notification(
-            name='vcpe.dns.queries_forwarded',
+            name='vsg.dns.queries_forwarded',
             type=sample.TYPE_CUMULATIVE,
             unit='queries',
             volume=float(message['payload']['queries_forwarded']),
@@ -226,7 +226,7 @@ class VCPEDNSQueriesAnsweredLocally(VCPENotificationBase):
     def process_notification(self, message):
         LOG.info('SRIKANTH: Received VCPE queries_answered_locally notification')
         yield sample.Sample.from_notification(
-            name='vcpe.dns.queries_answered_locally',
+            name='vsg.dns.queries_answered_locally',
             type=sample.TYPE_CUMULATIVE,
             unit='queries',
             volume=float(message['payload']['queries_answered_locally']),
@@ -244,7 +244,7 @@ class VCPEDNSServerQueriesSent(VCPENotificationBase):
         LOG.info('SRIKANTH: Received VCPE server.queries_sent notification')
         resource_id = message['payload']['vcpe_id'] + '-' + message['payload']['upstream_server']
         yield sample.Sample.from_notification(
-            name='vcpe.dns.server.queries_sent',
+            name='vsg.dns.server.queries_sent',
             type=sample.TYPE_CUMULATIVE,
             unit='queries',
             volume=float(message['payload']['queries_sent']),
@@ -262,7 +262,7 @@ class VCPEDNSServerQueriesFailed(VCPENotificationBase):
         LOG.info('SRIKANTH: Received VCPE server.queries_failed notification')
         resource_id = message['payload']['vcpe_id'] + '-' + message['payload']['upstream_server']
         yield sample.Sample.from_notification(
-            name='vcpe.dns.server.queries_failed',
+            name='vsg.dns.server.queries_failed',
             type=sample.TYPE_CUMULATIVE,
             unit='queries',
             volume=float(message['payload']['queries_failed']),
