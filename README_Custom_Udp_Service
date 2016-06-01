@@ -1,0 +1,26 @@
+
+sudo cp usr/local/bin/ceilometer-udpservice /usr/local/bin/
+cp cmd/udpservice.py /opt/stack/ceilometer/ceilometer/cmd/
+cp -rf infra_services/ /opt/stack/ceilometer/ceilometer/network/
+cp service.py /opt/stack/ceilometer/ceilometer/service.py
+cp udpservice.py /opt/stack/ceilometer/ceilometer/
+
+1.Command to run udpservice:
+ceilometer-udpservice --config-file /etc/ceilometer/ceilometer.conf & echo $! >/opt/stack/status/stack/ceilometer-udpservice.pid; fg || echo "ceilometer-udpservice failed to start" | tee "/opt/stack/status/stack/ceilometer-udpservice.failure"
+
+(or)
+ceilometer-udpservice --config-file /etc/ceilometer/ceilometer.conf  --log-file=/opt/stack/logs/ceilometer-udpservice
+
+2.Add below line in the entry_point.txt under ceilometer.notification
+[ceilometer.notification]
+infra=ceilometer.network.ext_services.openstack_infra.notifications:OPENSTACK_INFRANotification
+
+3.Entries in ceilometer.conf
+[udpservice]
+udp_address = 130.127.133.35
+udp_port = 4455
+rabbit_userid = stackrabbit
+rabbit_password = password
+rabbit_hosts = 130.127.133.35
+acord_control_exchange = infraservice
+service_mode = "infra"

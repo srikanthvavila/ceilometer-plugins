@@ -11,3 +11,4 @@ vcpe.dns.server.queries_sent= ceilometer.network.ext_services.vcpe.notifications
 vcpe.dns.server.queries_failed= ceilometer.network.ext_services.vcpe.notifications:VCPEDNSServerQueriesFailed
 volt.device= ceilometer.network.ext_services.volt.notifications:VOLTDeviceNotification
 volt.device.subscribers= ceilometer.network.ext_services.volt.notifications:VOLTDeviceSubscriberNotification
+infra=ceilometer.network.ext_services.openstack_infra.notifications:OPENSTACK_INFRANotification
