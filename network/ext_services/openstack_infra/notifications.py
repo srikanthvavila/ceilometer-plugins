@@ -42,7 +42,6 @@ class OPENSTACK_INFRANotificationBase(plugin_base.NotificationBase):
     @staticmethod
     def get_targets(conf):
         """Return a sequence of oslo.messaging.Target
-
         This sequence is defining the exchange and topics to be connected for
         this plugin.
         """
@@ -57,12 +56,12 @@ class OPENSTACK_INFRANotification(OPENSTACK_INFRANotificationBase):
     event_types = ['infra$']
 
     def process_notification(self, message):
-        LOG.info('Received OPENSTACK INFRA notification: vcpe_id=%(vcpe_id)s' % {'vcpe_id': message['payload']['resource_id']})
+        LOG.info('Received OPENSTACK INFRA notification: resource_id =%(resource_id)s' % {'resource_id': message['payload']['resource_id']})
         yield sample.Sample.from_notification(
-            name='os_infra',
-            type=sample.TYPE_GAUGE,
-            unit='os_infra',
-            volume=1,
+            name=message['payload']['counter_name'],
+            type=message['payload']['counter_type'],
+            unit=message['payload']['counter_unit'],
+            volume=message['payload']['counter_volume'],   
             user_id=message['payload']['user_id'],
             project_id=message['payload']['project_id'],
             resource_id=message['payload']['resource_id'],
