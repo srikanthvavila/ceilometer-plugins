@@ -17,11 +17,11 @@
 
 """
 
-import oslo.messaging
+import oslo_messaging
 from oslo_config import cfg
 
 from ceilometer.agent import plugin_base
-from ceilometer.openstack.common import log
+from oslo_log import log
 from ceilometer import sample
 
 OPTS = [
@@ -39,16 +39,15 @@ class OPENSTACK_INFRANotificationBase(plugin_base.NotificationBase):
 
     resource_name = None
 
-    @staticmethod
-    def get_targets(conf):
+    def get_targets(self,conf):
         """Return a sequence of oslo.messaging.Target
         This sequence is defining the exchange and topics to be connected for
         this plugin.
         """
         LOG.info("get_targets for OPENSTACK INFRA Notification Listener")
-        return [oslo.messaging.Target(topic=topic,
+        return [oslo_messaging.Target(topic=topic,
                                       exchange=conf.openstack_infra_service_control_exchange)
-                for topic in conf.notification_topics]
+                for topic in self.get_notification_topics(conf)]
 
 class OPENSTACK_INFRANotification(OPENSTACK_INFRANotificationBase):
 
